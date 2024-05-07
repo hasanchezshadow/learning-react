@@ -14,3 +14,10 @@ export const WINNER_COMBOS = [
     [0, 4, 8],
     [2, 4, 6],
 ];
+
+export const STORAGE_KEYS = {
+    TURN: 'turn',
+    BOARD: 'board'
+}
+
+export const INITIAL_DATA = Array(9).fill(null);

@@ -1,4 +1,4 @@
-import {WINNER_COMBOS} from "../constants.js";
+import {TURNS, WINNER_COMBOS} from "../constants.js";
 
 export const checkWinnerFrom = (boardToCheck) => {
     // We check all winning combinations to know if X or O won.
@@ -20,4 +20,8 @@ export const checkWinnerFrom = (boardToCheck) => {
 export const checkEndGameFrom = (boardToCheck) => {
     // we can also use the function every
     return !boardToCheck.includes(null);
+}
+
+export const getCurrentTurn = (turn) => {
+    return turn === TURNS.X ? TURNS.O : TURNS.X
 }

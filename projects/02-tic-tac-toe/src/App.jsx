@@ -3,15 +3,28 @@ import './App.css'
 import confetti from "canvas-confetti";
 
 import {Square} from './components/Square.jsx'
-import {TURNS} from "./constants.js";
-import {checkEndGameFrom, checkWinnerFrom} from "./logic/board.js";
+import {INITIAL_DATA, STORAGE_KEYS, TURNS} from "./constants.js";
+import {
+    checkEndGameFrom,
+    checkWinnerFrom,
+    getCurrentTurn,
+} from "./logic/board.js";
+import {
+    resetGameFromStorage,
+    getFromStorage, saveGameToStorage,
+} from "./logic/storage/storage.js";
 import {WinnerModal} from "./components/WinnerModal.jsx";
 
 function App() {
-    const initialData = Array(9).fill(null);
     // States
-    const [board, setBoard] = useState([...initialData]);
-    const [turn, setTurn] = useState(TURNS.X);
+    const [board, setBoard] = useState(() => {
+        const boardFromStorage = getFromStorage(STORAGE_KEYS.BOARD);
+        return boardFromStorage ?? [...INITIAL_DATA];
+    });
+    const [turn, setTurn] = useState(() => {
+        const turnFromStorage = getFromStorage(STORAGE_KEYS.TURN);
+        return getCurrentTurn(turnFromStorage) ?? TURNS.X;
+    });
     // null =  no winner, false = draw
     const [winner, setWinner] = useState(null);
 
@@ -29,23 +42,25 @@ function App() {
             confetti();
             return setWinner(newWinner);
 
-        }  else if (checkEndGameFrom(newBoard)) {
+        } else if (checkEndGameFrom(newBoard)) {
             // game is over -> draw
             setWinner(false);
-         }
+        }
 
-        // todo separete new turn logic into a function
+        // save game changes
+        saveGameToStorage({board: newBoard, turn});
+
         // update turn
-        const newTurn = turn === TURNS.X ? TURNS.O : TURNS.X;
+        const newTurn = getCurrentTurn(turn);
         setTurn(newTurn);
     };
 
     const resetGame = () => {
-        setBoard([...initialData]);
-        const newTurn = turn === TURNS.X ? TURNS.O : TURNS.X;
+        setBoard([...INITIAL_DATA]);
+        const newTurn = getCurrentTurn(turn);
         setTurn(newTurn);
         setWinner(null);
-
+        resetGameFromStorage();
     }
 
     return (
