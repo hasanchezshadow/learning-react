@@ -1,0 +1,28 @@
+name: Deploy Tic Tac Toe
+
+on: [workflow_dispatch]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    # runs-on: HERNANS-P15V
+    steps:
+      - name: Git Checkout
+        uses: actions/checkout@v4.1.5
+
+      - name: Npm Cache
+        uses: c-hive/gha-npm-cache@v1.1.0
+
+      - name: Install dependencies
+        run: npm i
+
+      - name: Build React App
+        run: npm run build
+        env:
+          HTTPS: 'true'
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v4.0.0
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./dist
