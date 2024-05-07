@@ -2,33 +2,10 @@ import {useState} from 'react'
 import './App.css'
 import confetti from "canvas-confetti";
 
-const TURNS = {
-    X: 'x',
-    O: 'o',
-};
-
-const WINNER_COMBOS = [
-    [0, 1, 2],
-    [3, 4, 5],
-    [6, 7, 8],
-    [0, 3, 6],
-    [1, 4, 7],
-    [2, 5, 8],
-    [0, 4, 8],
-    [2, 4, 6],
-];
-
-const Square = ({children, updateBoard, index, isSelected}) => {
-    const className = `square ${isSelected ? 'is-selected' : ''}`;
-    const handleClick = () => {
-        updateBoard(index);
-    }
-    return (
-        <div className={className} key={index} onClick={handleClick}>
-            {children}
-        </div>
-    )
-};
+import {Square} from './components/Square.jsx'
+import {TURNS} from "./constants.js";
+import {checkEndGameFrom, checkWinnerFrom} from "./logic/board.js";
+import {WinnerModal} from "./components/WinnerModal.jsx";
 
 function App() {
     const initialData = Array(9).fill(null);
@@ -37,28 +14,6 @@ function App() {
     const [turn, setTurn] = useState(TURNS.X);
     // null =  no winner, false = draw
     const [winner, setWinner] = useState(null);
-
-    const checkWinner = (boardToCheck) => {
-        // We check all winning combinations to know if X or O won.
-        for (let combo of WINNER_COMBOS) {
-            const [a, b, c] = combo;
-            if (
-                boardToCheck[a] && // 0 -> X or O
-                boardToCheck[a] === boardToCheck[b] &&
-                boardToCheck[a] === boardToCheck[c]
-            ) {
-                return boardToCheck[a]; // X or O
-            }
-        }
-
-        // No winner
-        return null;
-    }
-
-    const checkEndGame = (boardToCheck) => {
-        // we can also use the function every
-        return !boardToCheck.includes(null);
-    }
 
     const updateBoard = (index) => {
         // update not allowed
@@ -69,16 +24,17 @@ function App() {
         setBoard(newBoard);
 
         // Check if we have a winner
-        const newWinner = checkWinner(newBoard);
+        const newWinner = checkWinnerFrom(newBoard);
         if (newWinner) {
             confetti();
             return setWinner(newWinner);
 
-        }  else if (checkEndGame(newBoard)) {
+        }  else if (checkEndGameFrom(newBoard)) {
             // game is over -> draw
             setWinner(false);
          }
 
+        // todo separete new turn logic into a function
         // update turn
         const newTurn = turn === TURNS.X ? TURNS.O : TURNS.X;
         setTurn(newTurn);
@@ -93,6 +49,7 @@ function App() {
     }
 
     return (
+        // todo create component for the board
         <main className={'board'}>
             <h1>tic tac toe</h1>
             <button onClick={resetGame}>Reset</button>
@@ -121,24 +78,7 @@ function App() {
                 </Square>
             </section>
 
-            {
-                winner !== null && (
-                    <section className={'winner'}>
-                        <div className={'text'}>
-                            <h2>
-                                {winner === false ? 'Draw' : `The winner is `}
-                            </h2>
-                            <header className={'win'}>
-                                {winner && <Square>{winner}</Square>}
-                            </header>
-                            <footer>
-                                <button onClick={resetGame}>Restart
-                                </button>
-                            </footer>
-                        </div>
-                    </section>
-                )
-            }
+            <WinnerModal winner={winner} resetGame={resetGame}></WinnerModal>
         </main>
     )
 }
