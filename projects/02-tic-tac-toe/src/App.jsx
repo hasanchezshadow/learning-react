@@ -66,7 +66,7 @@ function App() {
     return (
         // todo create component for the board
         <main className={'board'}>
-            <h1>tic tac toe</h1>
+            <h1>Tic Tac Toe</h1>
             <button onClick={resetGame}>Reset</button>
             <section className={'game'}>
                 {
