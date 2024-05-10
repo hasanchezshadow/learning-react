@@ -10,16 +10,23 @@ export const APIS = {
 
 export function App() {
     const [fact, setFact] = useState('');
+    const [factError, setFactError] = useState('');
     const [catImageUrl, setCatImageUrl] = useState('');
 
     // Getting fact on page load
     useEffect(() => {
         fetch(APIS.FACT)
-            .then((response) => response.json())
+            .then((response) => {
+                if (!response.ok) {
+                    throw new Error('Error fetching fact');
+                }
+                return response.json();
+            })
             .then((data) => {
                 const {fact} = data;
                 setFact(fact);
-            });
+            })
+            .catch((e) => setFactError(e.message));
     }, []);
 
     // Getting cat image when fact is changed
