@@ -1,11 +1,10 @@
 import './style.css';
 import React from 'react';
 import ReactDOM from 'react-dom/client';
+import {App} from "./src/App.jsx";
 
 ReactDOM.createRoot(document.getElementById('app')).render(
     <React.StrictMode>
-        <div>
-            <h1>Hello Vite!</h1>
-        </div>
+        <App/>
     </React.StrictMode>
 )
