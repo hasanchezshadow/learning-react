@@ -15,7 +15,7 @@ export const getCatImageFromText = async (text) => {
     if (!response.ok) {
         throw new Error('Error fetching cat');
     }
-    const data = response.json();
+    const data = await response.json();
     const {url} = data;
     return url;
 }
