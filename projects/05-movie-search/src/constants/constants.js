@@ -1,4 +1,4 @@
 export const API_DATA = {
     BASE_URL: 'https://www.omdbapi.com',
-    KEY: ''
+    KEY: import.meta.env.VITE_API_KEY
 }
