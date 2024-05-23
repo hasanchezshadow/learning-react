@@ -1,14 +1,11 @@
 import './Footer.css';
-import {useFilter} from "../hooks/useFilter.js";
 export function Footer() {
-    const {filters} = useFilter();
     return (
         <footer className='footer'>
-            {
-                JSON.stringify(filters, null, 2)
-            }
-            <h4>Prueba técnica de React ⚛️ － <span> Siguiendo tutorial de @midudev</span></h4>
-            <h5>Shopping Cart con useContext & useReducer</h5>
+            <h4>Technical test of React ⚛️</h4>
+            <h4>Tutorial by - <span> @midudev</span></h4>
+            <h4>Coded by - <span> @hasanchezshadow</span></h4>
+            <h5>Shopping Cart with useContext & useReducer</h5>
         </footer>
     )
 }

@@ -4,6 +4,8 @@ import {Header} from "./components/Header.jsx";
 import {useFilter} from "./hooks/useFilter.js";
 import {Footer} from "./components/Footer.jsx";
 import {IS_DEVELOPMENT} from "./config.js";
+import {Cart} from "./components/Cart.jsx";
+import {CartProvider} from "./context/cart.jsx";
 
 function App() {
     const {filterProducts} = useFilter();
@@ -11,10 +13,12 @@ function App() {
 
     return (
         <>
-            <Header/>
-            <h1>Shopping cart 🛒</h1>
-            <Products products={filteredProducts}></Products>
-            {IS_DEVELOPMENT && <Footer/>}
+            <CartProvider>
+                <Header/>
+                <Cart/>
+                <Products products={filteredProducts}></Products>
+                {IS_DEVELOPMENT && <Footer/>}
+            </CartProvider>
         </>
     )
 }
