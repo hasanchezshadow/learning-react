@@ -16,6 +16,10 @@ const LazyAboutPage = lazy(() => import('./pages/About.jsx')); // Lazy import
 
 const routes = [
     {
+        path: '/:lang/about',
+        component: LazyAboutPage
+    },
+    {
         path: '/search/:query',
         component: SearchPage
     }
