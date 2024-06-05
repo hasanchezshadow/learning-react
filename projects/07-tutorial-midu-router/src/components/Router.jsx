@@ -2,14 +2,15 @@ import {useEffect, useState, Children} from "react";
 import {NAVIGATION_EVENT} from "../consts.js";
 
 import {match} from "path-to-regexp";
+import {getCurrentPath} from "../utils/utils.js";
 
 export function Router({children, routes = [], defaultComponent: DefaultComponent = () => <h1>404</h1>}) {
-    const [currentPath, setCurrentPath] = useState(window.location.pathname);
+    const [currentPath, setCurrentPath] = useState(getCurrentPath());
 
     useEffect(() => {
         const onLocationChange = () => {
             // window.location.captureEvents()
-            setCurrentPath(window.location.pathname);
+            setCurrentPath(getCurrentPath());
         }
 
         window.addEventListener(NAVIGATION_EVENT.PUSHSTATE, onLocationChange);
@@ -28,8 +29,8 @@ export function Router({children, routes = [], defaultComponent: DefaultComponen
        const isRoute = name === 'Route';
 
        return isRoute ? props : null;
-    }).filter(Boolean);
-    const routesToUse = routes.concat(routesFromChildren);
+    });
+    const routesToUse = routes.concat(routesFromChildren).filter(Boolean);
 
     const Component = routesToUse.find(({path}) => {
         if (path === currentPath) return true;
