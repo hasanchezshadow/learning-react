@@ -1,4 +1,4 @@
-import {NAVIGATION_EVENT} from "../consts.js";
+import {NAVIGATION_EVENT} from "../utils/consts.js";
 
 
 export function useNavigate() {

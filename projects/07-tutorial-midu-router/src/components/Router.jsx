@@ -1,5 +1,5 @@
 import {useEffect, useState, Children} from "react";
-import {NAVIGATION_EVENT} from "../consts.js";
+import {NAVIGATION_EVENT} from "../utils/consts.js";
 
 import {match} from "path-to-regexp";
 import {getCurrentPath} from "../utils/utils.js";
