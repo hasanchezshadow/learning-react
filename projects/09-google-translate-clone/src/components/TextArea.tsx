@@ -12,7 +12,7 @@ interface Props {
 const commonStyles = { border: 0, height: '200px', resize: 'none' };
 
 const getPlaceholder = ({type, isLoading}: {type: SectionType, isLoading: boolean}): string => {
-    if (type === SectionType.From) return 'Enter tex';
+    if (type === SectionType.From) return 'Enter text';
     if (isLoading) return 'Translating...';
     return 'Translation';
 }
