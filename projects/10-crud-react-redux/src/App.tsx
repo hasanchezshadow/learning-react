@@ -1,9 +1,15 @@
-import {useState} from 'react'
 import './App.css'
+import { ListOfUsers } from './components/ListOfUsers.tsx'
+import { CreateNewUser } from './components/CreateNewUser.tsx'
+import { Toaster } from 'sonner'
 
 function App () {
   return (
-    <h1>Project with redux</h1>
+    <>
+      <ListOfUsers />
+      <CreateNewUser />
+      <Toaster richColors />
+    </>
   )
 }
 
