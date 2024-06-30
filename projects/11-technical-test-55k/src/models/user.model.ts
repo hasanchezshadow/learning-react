@@ -1,3 +1,10 @@
+//Extending array prototype
+declare global {
+    interface Array<T> {
+        toSorted: (compareFn?: (a: T, b: T) => number) => T[]
+    }
+}
+
 export interface UserResponse {
     results: User[]
     info: Info
