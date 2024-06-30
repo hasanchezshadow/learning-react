@@ -1,21 +1,22 @@
-import {User} from "../models/user.model";
+import {SortBy, User} from "../models/models";
 
 interface Props {
+    changeSorting: (sort: SortBy) => void
+    deleteUser: (userId: string) => void;
     showColors: boolean;
     users: User[];
-    deleteUser: (userId: string) => void
 }
 
-export function UsersList({showColors, users, deleteUser}: Props) {
+export function UsersList({changeSorting, deleteUser, showColors, users}: Props) {
 
     return (
         <table>
             <thead>
             <tr>
                 <th>Picture</th>
-                <th>Name</th>
-                <th>Lastname</th>
-                <th>Country</th>
+                <th className={'pointer'} onClick={() => changeSorting(SortBy.NAME)}>Name</th>
+                <th className={'pointer'} onClick={() => changeSorting(SortBy.LAST)}>Lastname</th>
+                <th className={'pointer'} onClick={() => changeSorting(SortBy.COUNTRY)}>Country</th>
                 <th>Actions</th>
             </tr>
             </thead>

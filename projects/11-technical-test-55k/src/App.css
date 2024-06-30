@@ -22,3 +22,15 @@ table {
 .table--showColors tr:nth-child(even) {
   background-color: #333;
 }
+
+header {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 48px;
+  align-items: center;
+  justify-content: center;
+}
+
+.pointer {
+  cursor: pointer;
+}
