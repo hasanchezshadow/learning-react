@@ -10,6 +10,11 @@ export interface UserResponse {
     info: Info
 }
 
+export interface FetchUserResponseData {
+    nextPage?: number,
+    users: User[]
+}
+
 export interface User {
     gender: string
     name: Name

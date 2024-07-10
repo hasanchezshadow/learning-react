@@ -1,18 +1,19 @@
 import './App.css'
-import {ChangeEvent, useEffect, useMemo, useRef, useState} from "react";
-import {useGetUsers} from "./hooks/useGetUsers";
-import {SortBy, type User, type UserResponse} from "./models/models";
+import {ChangeEvent, useMemo, useState} from "react";
+import {useUsers} from "./hooks/useUsers";
+import {SortBy, type User} from "./models/models";
 import {UsersList} from "./components/UsersList";
+import {Results} from "./components/Results";
 
 function App() {
-    const {getUsers} = useGetUsers();
-    const [users, setUsers] = useState<User[]>([]);
+    const {isLoading, isError, users, refetch, fetchNextPage, hasNextPage} = useUsers();
+
     const [showColors, setShowColors] = useState(false);
     const [sorting, setSorting] = useState<SortBy>(SortBy.NONE);
     const [filteredCountry, setFilteredCountry] = useState<string | null>(null);
 
     // useRef -> to save values that we want to share between renders, but when changed, do not re-render the component
-    const originalUsers = useRef<User[]>([]);
+    // const originalUsers = useRef<User[]>([]);
 
 
     const toggleColors = () => {
@@ -24,11 +25,12 @@ function App() {
     }
 
     const handleDeleteUser = (userId: string) => {
-        setUsers(users.filter(user => user.login.uuid !== userId))
+        // setUsers(users.filter(user => user.login.uuid !== userId))
     }
 
     const handleResetUsers = () => {
-        setUsers(originalUsers.current);
+        // setUsers(originalUsers.current);
+        refetch();
     }
 
     const filterByCountry = (event: ChangeEvent<HTMLInputElement>) => {
@@ -39,13 +41,6 @@ function App() {
     const handleChangeSort = (sort: SortBy) => {
         setSorting(sort);
     }
-
-    useEffect(() => {
-        getUsers().then((response: UserResponse) => {
-            originalUsers.current = response.results;
-            setUsers(response.results);
-        });
-    }, []);
 
     const usersFilteredByCountry = useMemo(() => {
         return typeof filteredCountry === "string" && filteredCountry.length > 0
@@ -70,7 +65,7 @@ function App() {
         // return usersFilteredByCountry.toSorted(compareProperties[sorting]);
 
         const compareProperties = {
-            [SortBy.COUNTRY]: (user:User) => user.location.country,
+            [SortBy.COUNTRY]: (user: User) => user.location.country,
             [SortBy.NAME]: (user: User) => user.name.first,
             [SortBy.LAST]: (user: User) => user.name.last,
         }
@@ -84,15 +79,23 @@ function App() {
     return (
         <div>
             <h1>Technical Test 55k</h1>
+            <Results/>
             <header>
                 <button onClick={toggleColors}>Color rows</button>
-                <button onClick={toggleSortByCountry}>{sorting === SortBy.COUNTRY ? 'No sort by Country' : 'Sort by Country'}</button>
+                <button
+                    onClick={toggleSortByCountry}>{sorting === SortBy.COUNTRY ? 'No sort by Country' : 'Sort by Country'}</button>
                 <button onClick={handleResetUsers}>Reset users</button>
                 <input type="search" placeholder={'Enter the country'} onChange={filterByCountry}/>
             </header>
             <main>
-                <p>Users: {users.length}</p>
-                <UsersList users={sortedUsers} showColors={showColors} deleteUser={handleDeleteUser} changeSorting={handleChangeSort}/>
+                {users.length > 0 &&
+                    <UsersList users={sortedUsers} showColors={showColors} deleteUser={handleDeleteUser}
+                               changeSorting={handleChangeSort}/>
+                }
+                {isLoading && <strong>Loading...</strong>}
+                {!isLoading && isError && <p>An error has occurred</p>}
+                {!isLoading && !isError && users.length === 0 && <p>No users to show</p>}
+                {!isLoading && !isError && hasNextPage && <button onClick={() => fetchNextPage()}>Load more</button>}
             </main>
         </div>
     )
