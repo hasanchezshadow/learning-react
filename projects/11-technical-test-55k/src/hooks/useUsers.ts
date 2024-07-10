@@ -8,7 +8,9 @@ export function useUsers() {
             queryKey: ['users'], // <- The key of the information or query
             queryFn: getUsers, // <- How to get the information
             getNextPageParam: (lastPage) => lastPage.nextPage,
-            initialPageParam: 1
+            initialPageParam: 1,
+            // refetchOnWindowFocus: false,
+            staleTime: 1000 * 60 * 5 // 5 minutes
         },
     );
 
